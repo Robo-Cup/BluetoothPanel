@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "BluetoothPanel (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "BluetoothPanel (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

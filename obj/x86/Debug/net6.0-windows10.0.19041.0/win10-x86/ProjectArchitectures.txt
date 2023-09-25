@@ -1,0 +1,1 @@
+C:\Users\nandy\Documents\GitHub\BluetoothPanel\BluetoothPanel.csproj;x86
