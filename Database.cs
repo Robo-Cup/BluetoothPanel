@@ -9,15 +9,17 @@ using Windows.Security.Cryptography.Certificates;
 
 namespace BluetoothPanel
 {
-  
+
     public class Database
     {
         static Database Instance;
         public Dictionary<String, Value> data;
+        public Dictionary<String, (string, int)> sendData;
 
         public Database()
         {
             data = new Dictionary<String, Value>();
+            sendData = new Dictionary<String, (string, int)>();
         }
 
         public static Database GetInstance()
@@ -46,7 +48,7 @@ namespace BluetoothPanel
         {
             foreach (KeyValuePair<String, object> kv in newData)
             {
-                if (kv.Key.StartsWith("get") && data.ContainsKey(kv.Key)) return; 
+                if (kv.Key.StartsWith("get") && data.ContainsKey(kv.Key)) return;
                 String value = kv.Value.ToString();
                 if (double.TryParse(value, out double dRes))
                 {
@@ -78,12 +80,13 @@ namespace BluetoothPanel
             Dictionary<String, object> retVal = new Dictionary<string, object>();
             foreach (var item in data)
             {
-                if (item.Key.StartsWith("get"))
+                if (item.Key.StartsWith("get") && shouldSendData(item.Key, item.Value.ToString()))
                 {
+
                     if (item.Value is NumberValue numberValue)
                     {
                         retVal.Add(item.Key, numberValue.Number);
-                    } else if (item.Value is  BooleanValue bValue)
+                    } else if (item.Value is BooleanValue bValue)
                     {
                         retVal.Add(item.Key, bValue.Boolean);
                     } else
@@ -91,10 +94,44 @@ namespace BluetoothPanel
                         retVal.Add(item.Key, item.Value.ToString());
                     }
                 }
-            }            
+            }
             // Serialize the 'data' dictionary to a JSON string
             return JsonSerializer.Serialize(retVal);
         }
+
+        private int EXTRA_SENDS = 4;
+
+        private bool shouldSendData(String key, String value)
+        {
+            if (sendData.ContainsKey(key))
+            {
+                (string, int) temp = sendData[key];
+                if (value == temp.Item1)
+                {
+                    if (sendData[key].Item2 > EXTRA_SENDS)
+                    {
+                        return false;
+                    }
+                    sendData[key] = (value, temp.Item2 + 1);
+                    return true;
+                   
+                } else
+                {
+                    sendData[key] = (value, 0);
+                    return true;
+                }
+            } else
+            {
+                sendData[key] = (value, 0);
+                return true;
+            }
+        }
+
+        public void resetShouldSendData()
+        {
+            sendData.Clear();
+        }
+
 
     }
 

@@ -29,13 +29,13 @@
     <AppXManifest Include="C:\Users\nandy\Documents\GitHub\BluetoothPanel\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2023-09-25T20:01:34.785</Modified>
+      <Modified>2023-09-26T23:55:00.023</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\nandy\Documents\GitHub\BluetoothPanel\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2023-09-25T19:57:11.155</Modified>
+      <Modified>2023-09-26T23:54:59.708</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\nandy\Documents\GitHub\BluetoothPanel\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\BluetoothPanel.runtimeconfig.json">
       <PackagePath>BluetoothPanel.runtimeconfig.json</PackagePath>
@@ -43,11 +43,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\nandy\Documents\GitHub\BluetoothPanel\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\BluetoothPanel.dll">
       <PackagePath>BluetoothPanel.dll</PackagePath>
-      <Modified>2023-09-25T20:01:34.232</Modified>
+      <Modified>2023-09-26T23:54:59.581</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\nandy\Documents\GitHub\BluetoothPanel\obj\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\apphost.exe">
       <PackagePath>BluetoothPanel.exe</PackagePath>
-      <Modified>2023-09-25T20:01:34.252</Modified>
+      <Modified>2023-09-26T23:54:59.592</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\nandy\Documents\GitHub\BluetoothPanel\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\BluetoothPanel.deps.json">
       <PackagePath>BluetoothPanel.deps.json</PackagePath>

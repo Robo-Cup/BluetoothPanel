@@ -79,6 +79,8 @@
             </muxc:DropDownButton>
             <Button x:Name="BottomRightButtonOne" Click="ConnectToDevice" Content="Connect"/>
             <Button x:Name="BottomRightButtonTwo" Click="FindBluetoothConnections" Content="Find Devices"/>
+            <Button x:Name="BottomRightButtonThree" Click="ResetShouldSendData" Content="Reset Sending"/>
+
             <!-- Add more buttons or elements as needed -->
         </Canvas>
     </Grid>

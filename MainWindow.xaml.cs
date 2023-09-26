@@ -80,8 +80,10 @@ namespace BluetoothPanel
             Canvas.SetTop(BottomRightButtonOne, height - 50);
             Canvas.SetLeft(BottomRightButtonTwo, width - 100);
             Canvas.SetTop(BottomRightButtonTwo, height - 100);
+            Canvas.SetLeft(BottomRightButtonThree, width - 100);
+            Canvas.SetTop(BottomRightButtonThree, height - 150);
             Canvas.SetLeft(BottomRightDropDown, width - 100);
-            Canvas.SetTop(BottomRightDropDown, height - 150);
+            Canvas.SetTop(BottomRightDropDown, height - 200);
         }
 
         public void LeftListViewItemClicked(object sender, RoutedEventArgs e)
@@ -142,16 +144,13 @@ namespace BluetoothPanel
             {
                 if (currentValue is BooleanValue)
                 {
-                    Debug.WriteLine("GOT HERE");
                     if (bool.TryParse(newValue, out bool bRes))
                     {
-                        Debug.WriteLine("OWO");
                         instance.data[key] = new BooleanValue(bRes);
                     }
                 }
                 else if (currentValue is NumberValue)
                 {
-                    Debug.WriteLine("UWU");
                     if (double.TryParse(newValue, out double dRes))
                     {
                         instance.data[key] = new NumberValue(dRes);
@@ -220,6 +219,12 @@ namespace BluetoothPanel
             BTService = null;
             BTDevice.Dispose();
             BTDevice = null;
+            Database.GetInstance().resetShouldSendData();
+        }
+
+        public void ResetShouldSendData(object sender, RoutedEventArgs e)
+        {
+            Database.GetInstance().resetShouldSendData();
         }
 
         public async Task<bool> ConnectToDevice()
@@ -283,7 +288,6 @@ namespace BluetoothPanel
                             {
                                 OnMessageReceived(receiveBuffer.ToString());
                                 receiveBuffer.Clear();
-                                Debug.WriteLine("Buffer cleared");
                             }
                             catch (Exception exc)
                             {
@@ -329,8 +333,8 @@ namespace BluetoothPanel
                     {
                         String db = Database.GetInstance().ToString();
                         writer.WriteString(db + "|");
-                        await _writer.StoreAsync();
-                        await Task.Delay(TimeSpan.FromSeconds(2));
+                        await writer.StoreAsync();
+                        await Task.Delay(50);
                     } catch (Exception e)
                     {
                         Debug.WriteLine(e.Message);
