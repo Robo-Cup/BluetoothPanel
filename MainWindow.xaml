@@ -13,18 +13,18 @@
 
     <Grid x:Name="Layout">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="gridColumn0" Width="175"/>
+            <ColumnDefinition x:Name="gridColumn0" Width="250"/>
             <ColumnDefinition x:Name="gridColumn1" Width="2*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Left List for Key Values -->
-        <ListView x:Name="LeftListView" Grid.Column="0" Background="Red">
+        <ListView x:Name="LeftListView" Grid.Column="0" Background="black">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="local:KeyValueListItem">
                     <StackPanel Tapped="LeftListViewItemClicked" DataContext="{x:Bind Key}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition x:Name="gridColumn0" Width="1*" />
+                                <ColumnDefinition x:Name="gridColumn0" Width="2*" />
                                 <ColumnDefinition x:Name="gridColumn1" Width="1*" />
                             </Grid.ColumnDefinitions>
 

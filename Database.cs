@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-using Windows.Security.Cryptography.Certificates;
 
 namespace BluetoothPanel
 {
@@ -66,6 +62,30 @@ namespace BluetoothPanel
             }
         }
 
+        public void updateDBFromApp(Dictionary<String, object> newData)
+        {
+            foreach (KeyValuePair<String, object> kv in newData)
+            {
+                String value = kv.Value.ToString();
+                if (double.TryParse(value, out double dRes))
+                {
+                    data[kv.Key] = new NumberValue(dRes);
+                }
+                else if (int.TryParse(value, out int iRes))
+                {
+                    data[kv.Key] = new NumberValue((double)iRes);
+                }
+                else if (bool.TryParse(value, out bool bRes))
+                {
+                    data[kv.Key] = new BooleanValue(bRes);
+                }
+                else
+                {
+                    data[kv.Key] = new StringValue(value);
+                }
+            }
+        }
+
         public void printDB()
         {
             Debug.WriteLine("printing");
@@ -82,7 +102,6 @@ namespace BluetoothPanel
             {
                 if (item.Key.StartsWith("get") && shouldSendData(item.Key, item.Value.ToString()))
                 {
-
                     if (item.Value is NumberValue numberValue)
                     {
                         retVal.Add(item.Key, numberValue.Number);

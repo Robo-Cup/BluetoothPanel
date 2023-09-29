@@ -22,7 +22,9 @@ C:\Users\nandy\Documents\GitHub\BluetoothPanel\bin\x86\Debug\net6.0-windows10.0.
 C:\Users\nandy\Documents\GitHub\BluetoothPanel\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\Microsoft.Windows.Widgets.Projection.dll
 C:\Users\nandy\Documents\GitHub\BluetoothPanel\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\Microsoft.WindowsAppRuntime.Bootstrap.Net.dll
 C:\Users\nandy\Documents\GitHub\BluetoothPanel\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\Microsoft.WindowsAppRuntime.Release.Net.dll
+C:\Users\nandy\Documents\GitHub\BluetoothPanel\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\SharpDX.dll
 C:\Users\nandy\Documents\GitHub\BluetoothPanel\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\Microsoft.WindowsAppRuntime.Bootstrap.dll
+C:\Users\nandy\Documents\GitHub\BluetoothPanel\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\clrcompression.dll
 C:\Users\nandy\Documents\GitHub\BluetoothPanel\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\Microsoft.CSharp.dll
 C:\Users\nandy\Documents\GitHub\BluetoothPanel\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\Microsoft.VisualBasic.Core.dll
 C:\Users\nandy\Documents\GitHub\BluetoothPanel\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\Microsoft.VisualBasic.dll
@@ -285,3 +287,4 @@ C:\Users\nandy\Documents\GitHub\BluetoothPanel\obj\x86\Debug\net6.0-windows10.0.
 C:\Users\nandy\Documents\GitHub\BluetoothPanel\obj\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\qualifiers.txt.intermediate
 C:\Users\nandy\Documents\GitHub\BluetoothPanel\obj\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\MultipleQualifiersPerDimensionFound.txt
 C:\Users\nandy\Documents\GitHub\BluetoothPanel\obj\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\ProjectArchitectures.txt
+C:\Users\nandy\Documents\GitHub\BluetoothPanel\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\SharpDX.XInput.dll

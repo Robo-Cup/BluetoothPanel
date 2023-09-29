@@ -25,8 +25,11 @@ using Windows.Devices.Bluetooth.Rfcomm;
 using Windows.Devices.Enumeration;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using WindowsGamingInput = Windows.Gaming.Input;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
+using Windows.UI.Core;
+using SharpDX.XInput;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -44,7 +47,7 @@ namespace BluetoothPanel
         private DispatcherQueue dispatcherQueue;
 
         String SelectedDeviceId;
-        
+
         BluetoothDevice BTDevice;
         RfcommDeviceService BTService;
         StreamSocket BTSocket;
@@ -53,20 +56,106 @@ namespace BluetoothPanel
 
         ObservableCollection<KeyValueListItem> KeyValueListItems = new ObservableCollection<KeyValueListItem>();
         ObservableCollection<KeyValueGridItem> KeyValueGridItems = new ObservableCollection<KeyValueGridItem>();
+
+        private Controller currentController;
+        bool listening = false;
+        DispatcherTimer dispatcherTimer;
         public MainWindow()
         {
             this.InitializeComponent();
             dispatcherQueue = DispatcherQueue.GetForCurrentThread();
             LeftListView.ItemsSource = KeyValueListItems;
             RightGridView.ItemsSource = KeyValueGridItems;
+            WindowsGamingInput.Gamepad.GamepadAdded += Gamepad_GamepadAdded;
         }
 
-        private void Window_Activated(object sender, WindowActivatedEventArgs e)
+        private Gamepad gamepad;
+        private void Gamepad_GamepadAdded(object sender, WindowsGamingInput.Gamepad e)
+        {
+            Debug.WriteLine("ADDED" + e);
+
+            var controllers = new[] { new Controller(UserIndex.One), new Controller(UserIndex.Two), new Controller(UserIndex.Three), new Controller(UserIndex.Four) };
+            foreach (var controller in controllers)
+            {
+                if (controller.IsConnected)
+                {
+                    currentController = controller;
+                }
+            }
+            if (currentController == null)
+            {
+                Debug.WriteLine("FAILED");
+            }
+            listening = true;
+            Gamepad_GamepadListener();
+            // Handle the connected gamepad.
+            // You can access information about the gamepad using the 'e' parameter.
+        }
+
+        private void Gamepad_GamepadRemoved(object sender, Gamepad e)
+        {
+            Debug.WriteLine("REMOVED" + e);
+            currentController = null;
+            listening = false;
+            // Handle the connected gamepad.
+            // You can access information about the gamepad using the 'e' parameter.
+        }
+
+        private void Gamepad_GamepadListener()
+        {
+            Task t = Task.Run(async () =>
+            {
+                while (listening)
+                {
+                    if (currentController == null)
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(2));
+                        continue;
+                    }
+                    var state = currentController.GetState();
+                    var buttons = state.Gamepad.Buttons;
+                    Dictionary<String, object> dataToSend = new Dictionary<String, object>()
+                    {
+                        { "getLeftTrigger", state.Gamepad.LeftTrigger },
+                        { "getRightTrigger", state.Gamepad.RightTrigger },
+                        { "getLeftThumbX", state.Gamepad.LeftThumbX },
+                        { "getLeftThumbY", state.Gamepad.LeftThumbY },
+                        { "getRightThumbX", state.Gamepad.RightThumbX },
+                        { "getRightThumbY", state.Gamepad.RightThumbY },
+                        { "getAButton", buttons.HasFlag(GamepadButtonFlags.A) },
+                        { "getBButton", buttons.HasFlag(GamepadButtonFlags.B) },
+                        { "getXButton", buttons.HasFlag(GamepadButtonFlags.X) },
+                        { "getYButton", buttons.HasFlag(GamepadButtonFlags.Y) },
+                        { "getDPadUpButton", buttons.HasFlag(GamepadButtonFlags.DPadUp) },
+                        { "getDPadDownButton", buttons.HasFlag(GamepadButtonFlags.DPadDown) },
+                        { "getDPadLeftButton", buttons.HasFlag(GamepadButtonFlags.DPadLeft) },
+                        { "getDPadRightButton", buttons.HasFlag(GamepadButtonFlags.DPadRight) },
+                        { "getLeftShoulderButton", buttons.HasFlag(GamepadButtonFlags.LeftShoulder) },
+                        { "getRightShoulderButton", buttons.HasFlag(GamepadButtonFlags.RightShoulder) },
+                        { "getLeftThumbButton", buttons.HasFlag(GamepadButtonFlags.LeftThumb) },
+                        { "getRightThumbButton", buttons.HasFlag(GamepadButtonFlags.RightThumb) },
+                        { "getStartButton", buttons.HasFlag(GamepadButtonFlags.Start) },
+                        { "getBackButton", buttons.HasFlag(GamepadButtonFlags.Back) },
+                    };
+                    addKeyFromApp(dataToSend);
+                    await Task.Delay(TimeSpan.FromMilliseconds(20));
+                   }
+            });
+        }
+
+        private void addKeyFromApp(Dictionary<String, object> dataToSend)
+        {
+            Database.GetInstance().updateDBFromApp(dataToSend);
+            UpdateLeftListView();
+            UpdateRightGridView();
+        }
+
+        private void Window_Activated(object sender, Microsoft.UI.Xaml.WindowActivatedEventArgs e)
         {
             OffsetCanvasButtons(500, 500);
         }
 
-        private void Window_SizeChanged(object sender, WindowSizeChangedEventArgs e)
+        private void Window_SizeChanged(object sender, Microsoft.UI.Xaml.WindowSizeChangedEventArgs e)
         {
             double newWidth = e.Size.Width;
             double newHeight = e.Size.Height;
@@ -91,7 +180,7 @@ namespace BluetoothPanel
             var tappedStackPanel = sender as StackPanel;
             var key = tappedStackPanel.DataContext as String;
             // Check if item is already in Grid View
-            foreach(var item in KeyValueGridItems)
+            foreach (var item in KeyValueGridItems)
             {
                 if (item.Key == key) return;
             }
@@ -136,7 +225,7 @@ namespace BluetoothPanel
             Database instance = Database.GetInstance();
             Value currentValue = instance.data[key];
             String newValue = focusedTextBox.Text;
-            
+
             KeyValueGridItems[index].Value = newValue;
 
             // If item is a getter, update database
@@ -195,10 +284,10 @@ namespace BluetoothPanel
             BottomRightDropDownFlyout.Items.Clear();
 
             Debug.WriteLine("Paired Devices: ");
-            foreach(DeviceInformation device in PairedBluetoothDevices)
+            foreach (DeviceInformation device in PairedBluetoothDevices)
             {
                 Debug.WriteLine(device.Name.ToString());
-                MenuFlyoutItem temp = new MenuFlyoutItem{Text = device.Name};
+                MenuFlyoutItem temp = new MenuFlyoutItem { Text = device.Name };
                 temp.Click += (s, e) =>
                 {
                     DropDownSelected(device.Id);
@@ -208,7 +297,7 @@ namespace BluetoothPanel
             BottomRightButtonTwo.IsEnabled = true;
         }
 
-        public async void ConnectToDevice(object sender, RoutedEventArgs e)
+        public void ConnectToDevice(object sender, RoutedEventArgs e)
         {
             // await ConnectToDevice();
             _reader = null;
@@ -245,7 +334,7 @@ namespace BluetoothPanel
 
                     _writer = new DataWriter(BTSocket.OutputStream);
                     _reader = new DataReader(BTSocket.InputStream);
-                    
+
                     retVal = true;
                 }
             }
@@ -254,7 +343,7 @@ namespace BluetoothPanel
                 Console.WriteLine("Could not connect to Serial Device");
                 Console.WriteLine($"Error: {e}");
             }
-            
+
             BottomRightButtonOne.IsEnabled = true;
             return retVal;
         }
@@ -317,7 +406,8 @@ namespace BluetoothPanel
                 UpdateLeftListView();
                 UpdateRightGridView();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 // TODO: FUTURE ME FIX THE ERROR BEING TRHROWN IN THS FUNCTION
                 // Debug.WriteLine(e);
             }
@@ -335,12 +425,13 @@ namespace BluetoothPanel
                         writer.WriteString(db + "|");
                         await writer.StoreAsync();
                         await Task.Delay(50);
-                    } catch (Exception e)
+                    }
+                    catch (Exception e)
                     {
                         Debug.WriteLine(e.Message);
                         return;
                     }
-                    
+
                 }
             });
         }
@@ -363,7 +454,8 @@ namespace BluetoothPanel
                             // Value is different, update value
                             KeyValueListItems[index] = new KeyValueListItem(item.Key, item.Value.ToString());
                         }
-                    } else
+                    }
+                    else
                     {
                         // ITEM NOT IN UI
                         // Add item to UI
@@ -371,7 +463,7 @@ namespace BluetoothPanel
                     }
                 }
             });
-   
+
         }
 
         public void UpdateRightGridView()

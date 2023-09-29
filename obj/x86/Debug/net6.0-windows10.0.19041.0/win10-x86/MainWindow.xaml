@@ -13,7 +13,7 @@
 
     <Grid x:ConnectionId='2' x:Name="Layout">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:ConnectionId='3' x:Name="gridColumn0" Width="175"/>
+            <ColumnDefinition x:ConnectionId='3' x:Name="gridColumn0" Width="250"/>
             <ColumnDefinition x:ConnectionId='4' x:Name="gridColumn1" Width="2*"/>
         </Grid.ColumnDefinitions>
 
@@ -24,7 +24,7 @@
                     <StackPanel x:ConnectionId='21'                                                            >
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition x:Name="gridColumn0" Width="1*" />
+                                <ColumnDefinition x:Name="gridColumn0" Width="2*" />
                                 <ColumnDefinition x:Name="gridColumn1" Width="1*" />
                             </Grid.ColumnDefinitions>
 
@@ -79,7 +79,7 @@
             </muxc:DropDownButton>
             <Button x:ConnectionId='9' x:Name="BottomRightButtonOne"                         Content="Connect"/>
             <Button x:ConnectionId='10' x:Name="BottomRightButtonTwo"                                  Content="Find Devices"/>
-            <Button x:ConnectionId='11' x:Name="BottomRightButtonThree"                             Content="Find Devices"/>
+            <Button x:ConnectionId='11' x:Name="BottomRightButtonThree"                             Content="Reset Sending"/>
 
             <!-- Add more buttons or elements as needed -->
         </Canvas>
